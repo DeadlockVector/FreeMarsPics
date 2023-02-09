@@ -1,45 +1,72 @@
 #Api_key - IXcX32WXOjjvHDqgvbSpDrdlWHmh4h9C8EfXuzGa
-#rover = 'curiosity'
-#camera = 'fhaz'
-#sol = '1000'
-#request link f"https://api.nasa.gov/mars-photos/api/v1/rovers/{rover}/photos?sol={sol}&camera={camera}&api_key={Api_key}"
 
 import os
 import ezgmail
 import requests
+import shutil
 
 # TODO: Setup api keys along with environment variables
 #setting up environment variables
 #os.environ['Api_key'] = 
 
-# TODO:
-#download images?
-#get stuff from the gui
+# TODO: implement GUI
+# TODO: Implement feature to send emails to multiple recipients
+
+
 def getImage(Api_key, rover, camera, sol):
-    try:
-        request_link =  "https://api.nasa.gov/mars-photos/api/v1/rovers/"+rover+"/photos?sol="+sol+"&camera="+camera+"&api_key="+Api_key
-        res = requests.get(request_link).json()
-        #res = {'photos': [{'id': 102693, 'sol': 1000, 'camera': {'id': 20, 'name': 'FHAZ', 'rover_id': 5, 'full_name': 'Front Hazard Avoidance Camera'}, 'img_src': 'http://mars.jpl.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/01000/opgs/edr/fcam/FLB_486265257EDR_F0481570FHAZ00323M_.JPG', 'earth_date': '2015-05-30', 'rover': {'id': 5, 'name': 'Curiosity', 'landing_date': '2012-08-06', 'launch_date': '2011-11-26', 'status': 'active'}}, {'id': 102694, 'sol': 1000, 'camera': {'id': 20, 'name': 'FHAZ', 'rover_id': 5, 'full_name': 'Front Hazard Avoidance Camera'}, 'img_src': 'http://mars.jpl.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/01000/opgs/edr/fcam/FRB_486265257EDR_F0481570FHAZ00323M_.JPG', 'earth_date': '2015-05-30', 'rover': {'id': 5, 'name': 'Curiosity', 'landing_date': '2012-08-06', 'launch_date': '2011-11-26', 'status': 'active'}}]}
-        print(res)
-        return res
-    except:
-        print("NASA API error")
+    
+    #clearing directory
+    path = '../FreeMarsPics/MarsPics/'
+    for file_name in os.listdir(path):
+        file = path + file_name
+        if os.path.isfile(file):
+            print('Deleting file:', file)
+            os.remove(file)
 
+    #sending api request
+    request_link =  "https://api.nasa.gov/mars-photos/api/v1/rovers/"+rover+"/photos?sol="+sol+"&camera="+camera+"&api_key="+Api_key
+    res = requests.get(request_link).json()
 
+    #adding image links
+    #list images
+    images = []
+    print(res)
+    for i in res['photos']:
+        images.append(i['img_src'])
+
+    #downloading images to directory
+    #count just to name the images
+    count = 1    
+    for i in images:
+        image = requests.get(i, stream = True)
+        with open('../FreeMarsPics/MarsPics/'+'image'+str(count), 'wb') as f:
+            shutil.copyfileobj(image.raw, f)
+        print('Image sucessfully Downloaded')
+        count += 1
+        
 #IT WORKS
-def sendEmail(subject, message_body, recipients):
+# TODO: implement multiple recipients
+def sendEmail(recipients, subject, message_body):
+    #initializing ezgmail
     os.chdir(r'/home/isocyanate/FreeMarsPics')
     ezgmail.init()
+
+    #getting paths of images
+    attachments = []
+    path = '../FreeMarsPics/MarsPics/'
+    for image in os.listdir(path):
+        attachments.append(path+image)
+
+    #sending images
     try:
-        ezgmail.send(recipients, subject, message_body)
+        ezgmail.send(recipients, subject, message_body, attachments=attachments)
     except:
         print("Error sending email")
 
 Api_key = 'IXcX32WXOjjvHDqgvbSpDrdlWHmh4h9C8EfXuzGa'
 rover = 'curiosity'
-camera = 'rhaz'
+camera = 'fhaz'
 sol = '1000'
 
-#TODO: call function based on parameters
-#given by the user in the gui
-#sendEmail('Testing api', str(getImage(Api_key, rover, camera, sol)), 'aakm10304@gmail.com')
+getImage(Api_key, rover, camera, sol)
+sendEmail('aakm10304@gmail.com', 'yoyoyooyo', 'hoiiiiiiiiiiii')
