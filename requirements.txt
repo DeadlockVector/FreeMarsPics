@@ -1,0 +1,16 @@
+1) Pyqt5 >>
+    Use pip install Pyqt5 on windows
+    Use pip3 install Pyqt5 on Linux
+
+2)ezgmail >>
+    Use pip3 install ezgmail on Linux
+    Use pip install ezgmail on windows
+
+    If authentication is asked for, 
+    Use  username - seleniumjackson2004@gmail.com
+        password - seleniumtesting2004
+
+3)shutil module
+
+4)python 3.1x
+

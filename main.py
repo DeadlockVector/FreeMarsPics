@@ -9,11 +9,8 @@ import shutil
 #setting up environment variables
 #os.environ['Api_key'] = 
 
-# TODO: implement GUI
-# TODO: Implement feature to send emails to multiple recipients
 
-
-def getImage(Api_key, rover, camera, sol):
+def getImage(rover, camera, sol, Api_key = 'IXcX32WXOjjvHDqgvbSpDrdlWHmh4h9C8EfXuzGa'):
     
     #clearing directory
     path = '../FreeMarsPics/MarsPics/'
@@ -43,6 +40,14 @@ def getImage(Api_key, rover, camera, sol):
             shutil.copyfileobj(image.raw, f)
         print('Image sucessfully Downloaded')
         count += 1
+
+    # TODO: In the future, implement resizing of the image
+    # for file_name in os.listdir(path):
+    #     file = path+file_name
+    #     image = Image.open(file)
+    #     image = image.resize((561, 481))
+    #     image.save(file+'jpeg')
+    #     os.remove(file)
         
 #IT WORKS
 # TODO: implement multiple recipients
@@ -60,13 +65,14 @@ def sendEmail(recipients, subject, message_body):
     #sending images
     try:
         ezgmail.send(recipients, subject, message_body, attachments=attachments)
+        print("Sent mail")
     except:
         print("Error sending email")
 
-Api_key = 'IXcX32WXOjjvHDqgvbSpDrdlWHmh4h9C8EfXuzGa'
-rover = 'curiosity'
-camera = 'fhaz'
-sol = '1000'
+#Api_key = 'IXcX32WXOjjvHDqgvbSpDrdlWHmh4h9C8EfXuzGa'
+# rover = 'curiosity'
+# camera = 'fhaz'
+# sol = '1000'
 
-getImage(Api_key, rover, camera, sol)
-sendEmail('aakm10304@gmail.com', 'yoyoyooyo', 'hoiiiiiiiiiiii')
+#getImage(Api_key, rover, camera, sol)
+#sendEmail('aakm10304@gmail.com', 'yoyoyooyo', 'hoiiiiiiiiiiii')
