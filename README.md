@@ -10,6 +10,9 @@ Hey I'm from Bangalore, and I'm currently in S1 ECE at Amrita School of Engineer
 - Multiple windows for better clarity
 - Free pictures of mars
 
+## Use the buttons "Rover", "Sol" and "Camera" for help
+![Screenshot from 2023-02-11 04-53-26](https://user-images.githubusercontent.com/76811055/218162008-351cc9b3-bd92-4f17-a012-c7b74990da62.png)
+
 ## Misc
 Run MainWindow.py to open the app
 Please cremember to heck spam for the email
